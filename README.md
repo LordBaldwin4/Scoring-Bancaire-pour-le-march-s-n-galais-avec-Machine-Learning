@@ -135,5 +135,5 @@ Le dataset est **synthétique**, simulé avec des caractéristiques socio-écono
 
 ## 👤 Auteur
 
-> Projet réalisé dans le cadre d'une formation en **Data Science / Machine Learning**.
-> par Bassirou Ousmane Ba etudiant en genie logiciel et systemes informatique.
+> Projet réalisé dans le cadre d'une formation en **Data Science / Machine Learning**
+> Auteur Bassirou Ousmane Ba
