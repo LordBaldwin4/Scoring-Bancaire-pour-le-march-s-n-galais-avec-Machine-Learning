@@ -1,22 +1,22 @@
-# Python
+# Python — fichiers générés automatiquement à l'exécution, inutiles à versionner
 __pycache__/
 *.pyc
 
-# Environnements virtuels
+# Environnements virtuels — propres à chaque machine, chacun recrée le sien avec pip install
 venv/
 .venv/
 
-# Données volumineuses
+# Données volumineuses — trop lourdes pour Git, à partager autrement (Drive, S3...)
 data/raw/
 data/processed/
 
-# Modèles entraînés
+# Modèles entraînés — se régénèrent en relançant main.py, pas besoin de les stocker
 models/*.pkl
 models/*.joblib
 
-# Jupyter notebooks checkpoints
+# Jupyter — dossiers temporaires créés automatiquement, rien d'utile dedans
 .ipynb_checkpoints/
 
-# OS
+# Fichiers systèmes — créés par macOS et Windows, n'ont rien à faire dans le projet
 .DS_Store
 Thumbs.db
