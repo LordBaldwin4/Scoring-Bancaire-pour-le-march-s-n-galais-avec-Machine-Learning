@@ -1,23 +1,23 @@
-# Environnements
+# Environnements virtuels — chaque développeur crée le sien en local, inutile de le partager
 .env
 .venv
 venv/
 
-# Python
+# Python — fichiers générés automatiquement à l'exécution, ils changent tout le temps et polluent Git
 __pycache__/
 *.pyc
 
-# Data volumineuses
+# Données volumineuses — trop lourdes pour Git, à partager via Drive ou un stockage externe
 data/raw/
 data/processed/
 
-# Modèles entraînés
+# Modèles entraînés — ils se régénèrent en relançant le script, pas besoin de les versionner
 models/*.pkl
 models/*.joblib
 
-# Jupyter
+# Jupyter — dossiers temporaires créés automatiquement, rien d'utile dedans
 .ipynb_checkpoints/
 
-# OS
+# Fichiers système — créés automatiquement par macOS et Windows, n'ont rien à faire dans le projet
 .DS_Store
 Thumbs.db
