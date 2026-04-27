@@ -27,7 +27,7 @@ Le modèle Random Forest marche super bien avec les données qu'on lui a fabriqu
 
 ### Matrice de Confusion — Forêt Aléatoire
 
-![Matrice de confusion](confusion_matrix.png)
+![Matrice de confusion](confusion_matrix.PNG)
 
 Il n'y a pas eu d'erreurs, on a eu 211 cas où la réponse était non et elle aurait dû l'être, et 789 cas où la réponse était oui et elle aurait dû l'être.
 
