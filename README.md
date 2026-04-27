@@ -35,7 +35,7 @@ Il n'y a pas eu d'erreurs, on a eu 211 cas où la réponse était non et elle au
 
 ### Courbe ROC — L'AUC est de 1
 
-![Courbe ROC](roc_curve.png)
+![Courbe ROC](roc_curve.PNG)
 
 Quand la courbe ROC monte jusqu'en haut à gauche, ça veut dire que le système est super bon pour distinguer les bons clients des mauvais.
 
@@ -43,13 +43,13 @@ Quand la courbe ROC monte jusqu'en haut à gauche, ça veut dire que le système
 
 ## Tableau de bord interactif
 
-![Dashboard Tkinter](dashboard.png)
+![Dashboard Tkinter](dashboard.PNG)
 
 Une interface Tkinter propose plus de vingt types de graphiques, comme des histogrammes, des diagrammes en boîte, des cartes de chaleur pour les corrélations, ou même des courbes ROC.
 
 ### Matrice de Corrélation
 
-![Heatmap Corrélation](heatmap.png)
+![Heatmap Corrélation](heatmap.PNG)
 
 Les variables sont à peu près indépendantes, avec des corrélations proches de zéro, sauf quelques petites liaisons entre Montant Crédit et Défaut (0.46) et la Charge Fixe Mensuelle divisée par Défaut (0.33).
 
