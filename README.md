@@ -34,13 +34,13 @@ Le **scoring bancaire** est une méthode utilisée par les institutions financi�
 
 | Métrique | Random Forest | Régression Logistique |
 |---|:---:|:---:|
-| **AUC-ROC** | 0.757 | **0.796** |
-| Accuracy | 70% | 69% |
-| Précision — classe Défaut | 54% | 51% |
-| Rappel — classe Défaut | 54% | **71%** |
-| F1-score — classe Défaut | 0.54 | **0.60** |
-| Faux positifs | **63** | 86 |
-| Faux négatifs | 53 | **36** |
+| **AUC-ROC** | 0.743 | **0.765** |
+| Accuracy | 69% | **71%** |
+| Précision — classe Défaut | 50% | 53% |
+| Rappel — classe Défaut | 67% | **73%** |
+| F1-score — classe Défaut | 0.57 | **0.61** |
+| Faux positifs | 84 | **81** |
+| Faux négatifs | 41 | **34** |
 
 **Lecture des résultats :**
 - La **Régression Logistique** obtient le meilleur AUC (0.796) et détecte mieux les défauts (rappel 71%) — idéale si minimiser les faux négatifs est prioritaire (ne pas rater un mauvais payeur).
