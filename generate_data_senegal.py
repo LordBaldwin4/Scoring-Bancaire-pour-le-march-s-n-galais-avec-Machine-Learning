@@ -1,32 +1,61 @@
 import pandas as pd
 import numpy as np
-from config import RANDOM_STATE  # assure-toi que config.py contient RANDOM_STATE
+from config import RANDOM_STATE
+
+
+def _sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
 
 def generate_data_senegal(n_samples=2000):
-    np.random.seed(RANDOM_STATE)  # graine fixe pour reproduire exactement les mêmes données à chaque fois
+    np.random.seed(RANDOM_STATE)
 
-    # on fabrique 2000 clients fictifs mais réalistes, inspirés du contexte économique sénégalais
-    # toutes les valeurs monétaires sont en FCFA
+    # Génération de variables monétaires calibrées sur des ordres de grandeurs réalistes
+    revenus = np.random.lognormal(mean=np.log(150000), sigma=0.52, size=n_samples)
+    revenus = np.round(np.clip(revenus, 30000, 1500000) / 1000) * 1000
+
+    montants = np.random.lognormal(mean=np.log(1200000), sigma=0.75, size=n_samples)
+    montants = np.round(np.clip(montants, 100000, 10000000) / 10000) * 10000
+
+    charges = np.round(np.clip(revenus * np.random.normal(0.18, 0.05, size=n_samples), 20000, 600000) / 1000) * 1000
+    epargnes = np.round(np.clip(revenus * np.random.normal(0.12, 0.04, size=n_samples), 0, 350000) / 1000) * 1000
+
     data = pd.DataFrame({
-        'Age':                       np.random.randint(18, 65, n_samples),           # entre 18 et 65 ans, âge actif
-        'Revenu_Mensuel':            np.random.randint(50000, 1500000, n_samples),   # FCFA — du petit salaire au revenu confortable
-        'Anciennete_Emploi':         np.random.randint(0, 35, n_samples),            # en années, de débutant à vétéran
-        'Montant_Credit':            np.random.randint(100000, 10000000, n_samples), # FCFA — du petit crédit au gros prêt
-        'Duree_Credit':              np.random.randint(6, 84, n_samples),            # en mois, de 6 mois à 7 ans
-        'Historique_Defaut':         np.random.choice([0, 1], n_samples, p=[0.8, 0.2]),  # 20% ont déjà eu un défaut de paiement
-        'Nombre_Credits_Precedents': np.random.randint(0, 8, n_samples),             # combien de crédits le client a déjà eu
-        'Charge_Fixe_Mensuelle':     np.random.randint(0, 500000, n_samples),        # FCFA — loyer, factures, remboursements en cours
-        'Epargne_Mensuelle':         np.random.randint(0, 500000, n_samples),        # FCFA — ce que le client met de côté chaque mois
-        'Defaut':                    np.random.choice([0, 1], n_samples, p=[0.75, 0.25])  # 25% de défauts de base dans la population
+        'Age':                       np.random.randint(18, 65, size=n_samples),
+        'Revenu_Mensuel':            revenus.astype(int),
+        'Anciennete_Emploi':         np.clip(np.random.exponential(scale=3.5, size=n_samples).astype(int), 0, 40),
+        'Montant_Credit':            montants.astype(int),
+        'Duree_Credit':              np.random.randint(6, 85, size=n_samples),
+        'Historique_Defaut':         np.random.binomial(1, 0.18, size=n_samples),
+        'Nombre_Credits_Precedents': np.clip(np.random.poisson(1.5, size=n_samples), 0, 8),
+        'Charge_Fixe_Mensuelle':     charges.astype(int),
+        'Epargne_Mensuelle':         epargnes.astype(int)
     })
 
-    # on applique une règle métier simple pour rendre les données plus réalistes :
-    # si le crédit dépasse 5 millions ou si les charges fixes dépassent 300 000 FCFA/mois,
-    # on force le défaut à 1 — ce sont des profils clairement à risque
-    data['Defaut'] = np.where(
-        (data['Montant_Credit'] > 5000000) | (data['Charge_Fixe_Mensuelle'] > 300000),
-        1,
-        data['Defaut']  # sinon on garde la valeur tirée au sort plus haut
+    # Score logistique probabiliste (sigmoïde + bruit gaussien) pour générer le label
+    # Cette approche est plus réaliste qu'un simple if/else et reflète un taux de défaut ~31%
+    score = (
+        -0.85 * ((data['Revenu_Mensuel'] - 150000) / 100000)
+        + 0.45 * ((data['Montant_Credit'] - 1200000) / 2000000)
+        + 0.35 * ((data['Charge_Fixe_Mensuelle'] - 100000) / 100000)
+        - 0.45 * ((data['Epargne_Mensuelle'] - 20000) / 30000)
+        + 0.20 * ((data['Age'] - 35) / 10)
+        - 0.30 * ((data['Anciennete_Emploi'] - 3) / 5)
+        + 0.30 * ((data['Duree_Credit'] - 24) / 12)
+        + 0.80 * data['Historique_Defaut']
+        + 0.25 * ((data['Nombre_Credits_Precedents'] - 1) / 2)
     )
+    score += np.random.normal(0, 0.75, size=n_samples)
+
+    probabilities = _sigmoid(score - 1.0)
+    data['Defaut'] = np.random.binomial(1, probabilities)
+
+    # Ajustement fin pour rester cohérent avec le PAR30 microfinance UEMOA (~31%)
+    target_rate = 0.31
+    actual_rate = data['Defaut'].mean()
+    if abs(actual_rate - target_rate) > 0.01:
+        offset = np.log(target_rate / (1 - target_rate)) - np.log(actual_rate / (1 - actual_rate))
+        probabilities = _sigmoid(score + offset - 1.0)
+        data['Defaut'] = np.random.binomial(1, probabilities)
 
     return data
