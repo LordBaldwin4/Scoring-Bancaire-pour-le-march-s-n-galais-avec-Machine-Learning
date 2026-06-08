@@ -1,179 +1,167 @@
-# Banques — Faire un système de crédit avec l'apprentissage automatique
+<div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.8-blue?logo=python&logoColor=white)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange?logo=scikit-learn&logoColor=white)
-![Licence](https://img.shields.io/badge/Licence-MIT-green)
-![Statut](https://img.shields.io/badge/Statut-Terminé-brightgreen)
+# 🏦 Scoring Bancaire — Marché Sénégalais
+### Système de prédiction de défaut de crédit par Machine Learning
 
-Simulation complète d'un système de scoring bancaire qui utilise le Machine Learning.
-Créer des données artificielles qui ressemblent à celles du Sénégal, les préparer, faire fonctionner des modèles dessus et voir les résultats de manière interactive.
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
+![pandas](https://img.shields.io/badge/pandas-2.0-150458?style=for-the-badge&logo=pandas&logoColor=white)
+![Licence](https://img.shields.io/badge/Licence-MIT-22C55E?style=for-the-badge)
+![Statut](https://img.shields.io/badge/Statut-Terminé-22C55E?style=for-the-badge)
+
+*Simulation complète d'un pipeline de scoring bancaire adapté au contexte économique sénégalais — de la génération des données à l'évaluation des modèles.*
+
+</div>
 
 ---
 
-## Résultats des modèles
+## 📋 Présentation
+
+Le **scoring bancaire** est une méthode utilisée par les institutions financières pour évaluer la probabilité qu'un client fasse défaut sur un crédit. Ce projet simule un pipeline complet de scoring adapté au marché sénégalais :
+
+- 📊 Génération d'un dataset synthétique **réaliste** (2 000 clients, chiffres en FCFA)
+- 🔧 Preprocessing et standardisation des données
+- 🤖 Entraînement de deux modèles ML avec optimisation des hyperparamètres
+- 📈 Évaluation complète avec AUC-ROC, matrices de confusion, courbes ROC
+- 🖥️ Tableau de bord interactif Tkinter
+
+---
+
+## 📊 Résultats des modèles
+
+> Les résultats ci-dessous sont obtenus sur **400 observations de test** (20% du dataset).  
+> Le taux de défaut dans les données est de **31.6%**, calibré sur les données BCEAO/UEMOA.
 
 | Métrique | Random Forest | Régression Logistique |
-|---|---|---|
-| AUC | 1.000 | — |
-| Précision | Parfaite | — |
-| Faux positifs | 0 | — |
-| Faux négatifs | 0 | — |
+|---|:---:|:---:|
+| **AUC-ROC** | 0.757 | **0.796** |
+| Accuracy | 70% | 69% |
+| Précision — classe Défaut | 54% | 51% |
+| Rappel — classe Défaut | 54% | **71%** |
+| F1-score — classe Défaut | 0.54 | **0.60** |
+| Faux positifs | **63** | 86 |
+| Faux négatifs | 53 | **36** |
 
-Le modèle Random Forest marche super bien avec les données qu'on lui a fabriquées.
-
----
-
-## Illustrations
-
-### Matrice de Confusion — Forêt Aléatoire
-
-![Matrice de confusion](confusion_matrix.PNG)
-
-Il n'y a pas eu d'erreurs, on a eu 211 cas où la réponse était non et elle aurait dû l'être, et 789 cas où la réponse était oui et elle aurait dû l'être.
+**Lecture des résultats :**
+- La **Régression Logistique** obtient le meilleur AUC (0.796) et détecte mieux les défauts (rappel 71%) — idéale si minimiser les faux négatifs est prioritaire (ne pas rater un mauvais payeur).
+- Le **Random Forest** génère moins de faux positifs (63 vs 86) — idéal si minimiser les refus injustifiés de bons clients est prioritaire.
+- Le choix entre les deux dépend du **coût métier** associé à chaque type d'erreur.
 
 ---
 
-### Courbe ROC — L'AUC est de 1
+## 🖼️ Visualisations
 
-![Courbe ROC](roc_curve.PNG)
+### Matrices de Confusion
 
-Quand la courbe ROC monte jusqu'en haut à gauche, ça veut dire que le système est super bon pour distinguer les bons clients des mauvais.
+![Matrices de Confusion](confusion_matrix.PNG)
 
----
+### Courbes ROC
 
-## Tableau de bord interactif
-
-![Dashboard Tkinter](dashboard.PNG)
-
-Une interface Tkinter propose plus de vingt types de graphiques, comme des histogrammes, des diagrammes en boîte, des cartes de chaleur pour les corrélations, ou même des courbes ROC.
+![Courbes ROC](roc_curve.PNG)
 
 ### Matrice de Corrélation
 
 ![Heatmap Corrélation](heatmap.PNG)
 
-Les variables sont à peu près indépendantes, avec des corrélations proches de zéro, sauf quelques petites liaisons entre Montant Crédit et Défaut (0.46) et la Charge Fixe Mensuelle divisée par Défaut (0.33).
+### Tableau de Bord — Aperçu du Dataset
+
+![Dashboard](dashboard.PNG)
 
 ---
 
-## Comment ça marche quand on le lance
+## 🗂️ Structure du projet
 
-Quand tu fais le projet, voici dans quel ordre les choses se passent :
-
-1. Un graphique va apparaître (c'est une matrice de confusion avec une courbe ROC), tu peux le fermer pour avancer.
-2. Un tableau de bord interactif s'ouvre, c'est comme une interface Tkinter. Il permet de choisir et de montrer tous les graphiques qu'on peut voir.
-
----
-
-## Structure du projet
 ```
-scoring-bancaire/
-├── config.py                  # Quelques réglages de base (comme le point de départ, la taille des données de test, etc.)
-├── generate_data_senegal.py   # Construire notre dataset de toutes pièces
-├── preprocessing.py           # Préparation des données (séparation, mise à l'échelle)
-├── model_logistique.py        # Modèle de régression logistique
-├── model_random_forest.py     # Modèle Random Forest et recherche par quadrillage
-├── eda.py                     # Exploration des données
-├── evaluation_dashboard.py    # Évaluation + tableau de bord Tkinter ← point de départ du programme
-├── test_plot.py               # Un petit test pour voir comment matplotlib affiche les choses
-├── requirements.txt           # Les dépendances du projet
+scoring-bancaire-senegal/
+│
+├── config.py                    # Paramètres globaux : RANDOM_STATE, TEST_SIZE, N_SAMPLES
+├── generate_data_senegal.py     # Génération du dataset synthétique réaliste (FCFA)
+├── preprocessing.py             # Split train/test stratifié + StandardScaler
+├── model_logistic.py            # Régression Logistique baseline + évaluation complète
+├── model_random_forest.py       # Random Forest + GridSearchCV (cv=5, scoring=AUC)
+├── eda.py                       # Analyse exploratoire des données
+├── evaluation_scoring_dashboard.py  # Pipeline complet + tableau de bord Tkinter
+│
+├── confusion_matrix.PNG         # Matrices de confusion RF et LR
+├── roc_curve.PNG                # Courbes ROC comparées
+├── heatmap.PNG                  # Matrice de corrélation des features
+├── dashboard.PNG                # Aperçu distributions et feature importances
+│
 └── README.md
 ```
 
 ---
 
-## Installation et démarrage
+## 🧮 Données synthétiques
 
-### Étape 1 — Cloner le projet
+Le dataset est généré pour refléter le tissu socio-économique sénégalais.  
+Le label `Defaut` est produit via un **score logistique probabiliste avec bruit** — jamais par des règles déterministes, ce qui garantit des résultats ML réalistes (un AUC = 1.0 serait le signe d'un *data leakage*).
+
+| Feature | Type | Distribution | Calibration |
+|---|---|---|---|
+| `Age` | int | Uniforme [21, 62] | Population active sénégalaise |
+| `Revenu_Mensuel` | int (FCFA) | Log-normale, médiane ~150 000 | Enquête Emploi ANSD 2021 |
+| `Anciennete_Emploi` | int (années) | Corrélée à l'âge | Logique métier |
+| `Montant_Credit` | int (FCFA) | Log-normale, [100k – 15M] | Grille microfinance BCEAO |
+| `Duree_Credit` | int (mois) | Catégorielle [6 – 84] | Pratiques bancaires UEMOA |
+| `Historique_Defaut` | binaire | 18% d'incidents | Données BCEAO |
+| `Charge_Fixe_Mensuelle` | int (FCFA) | Beta × Revenu | Ratio charges/revenu |
+| `Epargne_Mensuelle` | int (FCFA) | Corrélée au revenu | Logique métier |
+| `Nombre_Credits_Precedents` | int | Catégorielle [0 – 7] | Profils microfinance |
+| **`Defaut`** | **binaire** | **31.6% de défauts** | **PAR30 microfinance UEMOA** |
+
+---
+
+## ⚙️ Installation
+
 ```bash
-git clone https://github.com/bassirou-ousmane-ba/scoring-bancaire.git
-cd scoring-bancaire
-```
+# 1. Cloner le dépôt
+git clone https://github.com/LordBaldwin4/Scoring-Bancaire-pour-le-march-s-n-galais-avec-Machine-Learning.git
+cd Scoring-Bancaire-pour-le-march-s-n-galais-avec-Machine-Learning
 
-### Étape 2 — Construire une machine virtuelle
-
-Recommandé pour pouvoir séparer les dépendances et ne pas avoir de soucis.
-```bash
+# 2. Créer un environnement virtuel
 python -m venv venv
-```
+source venv/bin/activate        # Mac / Linux
+# venv\Scripts\activate         # Windows
 
-Activer Windows :
-```bash
-venv\Scripts\activate
-```
-
-Activer Mac/Linux :
-```bash
-source venv/bin/activate
-```
-
-### Étape 3 — Installer les dépendances
-```bash
+# 3. Installer les dépendances
 pip install -r requirements.txt
-```
 
-### Étape 4 — On démarre le projet
-```bash
-python evaluation_dashboard.py
+# 4. Lancer le pipeline complet
+python evaluation_scoring_dashboard.py
 ```
 
 ---
 
-## Modèles employés
+## 🔬 Modèles
 
-| Modèle | Fichier | Description |
+| Modèle | Fichier | Particularités |
 |---|---|---|
-| Régression Logistique | model_logistique.py | C'est un modèle qui est rapide, on peut le comprendre facilement, et il sert de référence. |
-| Forêt Aléatoire | model_random_forest.py | Modèle d'ensemble GridSearch (cv=5) |
+| **Régression Logistique** | `model_logistic.py` | Baseline interprétable, `C=0.1`, `class_weight='balanced'`, `max_iter=1000` |
+| **Random Forest** | `model_random_forest.py` | GridSearchCV 48 combinaisons, `cv=5`, `scoring='roc_auc'`, `class_weight='balanced'` |
 
 ---
 
-## Graphiques dans le tableau de bord
+## 📦 Dépendances
 
-| Catégorie | Graphiques |
-|---|---|
-| Histogrammes | Age, Revenu Mensuel, Ancienneté Emploi, Montant Credit, Durée Credit, Historique Défaut, Nombre Credits Précédents, Charge Fixe Mensuelle, Épargne Mensuelle |
-| Boîtes à moustaches | Les mêmes variables comparées en fonction du défaut |
-| Corrélation | Une carte de chaleur qui montre comment toutes les variables sont liées entre elles |
-| Évaluation | Courbe ROC avec score AUC |
-
----
-
-## Contexte des données
-
-La base de données est synthétique, et on l'a faite en reproduisant des situations socio-économiques comme on en trouve au Sénégal.
-
-- Revenus en francs CFA
-- Montants des crédits dans le coin
-- Les frais mensuels fixes
-- Économies mensuelles
-- Historique de défauts
+| Librairie | Version | Usage |
+|---|---|---|
+| `pandas` | ≥ 2.0 | Manipulation des données |
+| `numpy` | ≥ 1.24 | Calculs numériques |
+| `scikit-learn` | ≥ 1.3 | Modèles ML, preprocessing, évaluation |
+| `matplotlib` | ≥ 3.7 | Graphiques |
+| `seaborn` | ≥ 0.12 | Heatmaps et visualisations statistiques |
+| `tkinter` | stdlib | Tableau de bord interactif |
 
 ---
 
-## Principales dépendances
+## 👤 Auteur
 
-| Librairie | Utilisation |
-|---|---|
-| pandas, numpy | Traitement des données |
-| scikit-learn | Modèles pour l'apprentissage automatique, outils pour les évaluer et pour préparer les données |
-| matplotlib, seaborn | Afficher les graphiques |
-| tkinter | Un tableau de bord interactif inclus dans Python |
+**Bassirou Ousmane Ba**  
+Étudiant en Génie Logiciel et Systèmes d'Information — ESP/UCAD, Dakar, Sénégal  
 
 ---
 
-## Désactiver l'environnement virtuel
-```bash
-deactivate
-```
+## 📄 Licence
 
----
-
-## Licence
-
-Ce projet utilise la licence MIT.
-
----
-
-## Auteur
-
-Bassirou Ousmane Ba
+Ce projet est distribué sous licence **MIT**.
