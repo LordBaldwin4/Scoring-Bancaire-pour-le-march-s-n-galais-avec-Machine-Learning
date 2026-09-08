@@ -116,8 +116,8 @@ Le label `Defaut` est produit via un **score logistique probabiliste avec bruit*
 
 ```bash
 # 1. Cloner le dépôt
-git clone https://github.com/LordBaldwin4/Scoring-Bancaire-pour-le-march-s-n-galais-avec-Machine-Learning.git
-cd Scoring-Bancaire-pour-le-march-s-n-galais-avec-Machine-Learning
+git clone https://github.com/LordBaldwin4/Scoring-Bancaire-Senegal-SBS-.git
+cd Scoring-Bancaire-Senegal-SBS-
 
 # 2. Créer un environnement virtuel
 python -m venv venv
