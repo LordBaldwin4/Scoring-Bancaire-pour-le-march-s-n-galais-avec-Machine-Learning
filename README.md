@@ -165,3 +165,11 @@ python evaluation_scoring_dashboard.py
 ## 📄 Licence
 
 Ce projet est distribué sous licence **MIT**.
+
+## 🧪 Tests
+
+Les tests couvrent la génération du jeu de données synthétique et la séparation reproductible entre les données d'entraînement et de test :
+
+```bash
+python -m unittest discover -s tests -v
+```
